@@ -1,0 +1,48 @@
+---
+# - To monitor the destinations, try something like this:
+# mosquitto_sub -h $MQTT -t "mqtt2ping/#"
+# mosquitto_sub -F '@Y-@m-@dT@H:@M:@S@z : %q : %t : %p' -h $MQTT  -t "mqtt2ping/#"  ; # pretty format
+#
+# - Destinations can be dynamically added/removed using the topic payloads like:
+# mosquitto_pub -h $MQTT -t "mqtt2ping/destination/foo1" -m 1.2.3.4
+# mosquitto_pub -h $MQTT -t "mqtt2ping/destination/foo2" -m '{"interval": 10, "address":"fd00:10:244:1::4"}'
+#
+# - To trigger status (i.e. force an advertisement):
+# mosquitto_pub -h $MQTT -t "mqtt2ping/status" -n       ; # all
+# mosquitto_pub -h $MQTT -t "mqtt2ping/status/foo1" -n  ; # only foo1
+#
+# - To delete a destination:
+# mosquitto_pub -h $MQTT -t "mqtt2ping/destination/foo2" -n
+
+
+# MQTT publish the state of all destinations every 10 minutes.
+# Default: every 290 years :^)
+advertisements: 600
+
+# Ping interval of 60 seconds for destinations that do not specify it.
+# Default: 3 seconds
+interval: 60
+
+# Periodically sweep all destinations and MQTT publish if its state changes.
+# Default: 5 seconds
+update-interval: 2
+
+destinations:
+  # Lookup address using DNS
+  # Use address as the name
+  # Use implicit interval from above (i.e. 60s)
+  - address: "localhost"
+
+  - address: "127.0.0.1"
+    name: "localhost2"
+    interval: 2
+
+  - address: "127.0.0.1"
+    name: "localhost3"
+    interval: 3
+
+  # - address: "adafruit.io"
+  #   interval: 3600
+
+  # - address: "google.com"
+  #   interval: 7200

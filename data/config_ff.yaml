@@ -1,0 +1,8 @@
+---
+destinations:
+  - name: "backyard-camera"
+    address: "192.168.10.147"
+    interval: 300
+  - name: "aio"
+    address: "adafruit.io"
+    interval: 3600

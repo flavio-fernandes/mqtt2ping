@@ -1,0 +1,3 @@
+cmd/mqtt2ping/__debug_bin
+cmd/mqtt2ping/mqtt2ping
+bin/log
