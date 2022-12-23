@@ -1,0 +1,14 @@
+[Unit]
+Description=Mqtt2ping Controller
+After=network.target
+
+[Service]
+User=ff
+Type=simple
+ExecStart=/home/ff/mqtt2ping.git/dist/start.sh
+StandardOutput=null
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+Alias=mqtt2ping.service
