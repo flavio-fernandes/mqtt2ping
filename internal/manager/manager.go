@@ -127,6 +127,7 @@ func (m *Manager) addDestination(destination Destination) {
 		destination.IntervalSeconds = m.defaultIntervalSeconds
 	}
 	destination.pinger.Interval = time.Duration(destination.IntervalSeconds) * time.Second
+	destination.pinger.SetPrivileged(true)
 
 	m.destinationMap[destination.Name] = &destination
 	logger.Infof("Added destination %s (%s)", destination.Name, pinger.IPAddr().IP.String())
