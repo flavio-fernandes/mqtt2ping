@@ -1,0 +1,58 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mqtt2ping
+  labels:
+        app: mqtt2ping
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mqtt2ping
+  template:
+    metadata:
+      labels:
+        app: mqtt2ping
+    spec:
+      securityContext:
+        runAsUser: 0
+      containers:
+      - name: broker-container
+        image: quay.io/ffernand/mqtt2ping:privileged
+        imagePullPolicy: Always
+        command: ["/mqtt2ping"]
+        args: ["-broker", "tcp://mqtt2ping-service-broker.default.svc.cluster.local:1883", "-config", "/data/config.yaml", "-client", "random"]
+        volumeMounts:
+        - name: config-volume
+          mountPath: /data/config.yaml
+          subPath: config.yaml
+      volumes:
+        - name: config-volume
+          configMap:
+            name: mqtt2ping-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mqtt2ping-config
+data:
+  config.yaml: |
+    interval: 10
+    destinations:
+      - address: "localhost"
+        interval: 1
+      - address: "kubernetes.default.svc.cluster.local"
+        name: "kubernetes"
+        interval: 6
+      - address: "kube-dns.kube-system.svc.cluster.local"
+        name: "dns"
+      - address: "1.1.1.1"
+        name: "cloudflare"
+        interval: 42
+      - address: "8.8.8.8"
+        name: "google"
+        interval: 42
+      - address: "9.9.9.9"
+        name: "ibm"
+        interval: 42

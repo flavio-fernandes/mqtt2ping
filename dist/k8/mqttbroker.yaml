@@ -1,0 +1,44 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mqtt-broker-mqtt2ping
+  namespace: default
+  labels:
+        app: mqtt2pingbroker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mqtt2pingbroker
+  template:
+    metadata:
+      labels:
+        app: mqtt2pingbroker
+    spec:
+      containers:
+      - name: broker-container
+        image: quay.io/ffernand/hivemq-ce@sha256:9b1c6d91e70578c1383f1325b04ae89bce477aec8bfed1286eddc7266436412c
+        resources:
+          limits:
+            memory: "600Mi"
+            cpu: "300m"
+          requests:
+            memory: "200Mi"
+            cpu: "150m"
+        ports:
+        - containerPort: 1883
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mqtt2ping-service-broker
+spec:
+  selector:
+    app: mqtt2pingbroker
+  type: LoadBalancer
+  ports:
+  - port: 1883
+    targetPort: 1883
+    nodePort: 30300
