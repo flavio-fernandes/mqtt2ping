@@ -9,7 +9,7 @@ build:
 .PHONY: run
 run: build
 	@echo "+ $@"
-	@cd ./bin && ./mqtt2ping
+	@cd ./dist && ./mqtt2ping
 
 .PHONY: fmt
 fmt:

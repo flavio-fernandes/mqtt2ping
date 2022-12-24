@@ -19,7 +19,7 @@
 # Default: every 290 years :^)
 advertisements: 600
 
-# Ping interval of 60 seconds for destinations that do not specify it.
+# Ping interval of 60 seconds for destinations that do not specify one.
 # Default: 3 seconds
 interval: 60
 
